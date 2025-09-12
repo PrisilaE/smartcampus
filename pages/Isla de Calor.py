@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-import plost
 import plotly.graph_objects as go
+from streamlit_autorefresh import st_autorefresh
 
 st.title("Dashboard - Isla de Calor")
 st.set_page_config(layout='wide', initial_sidebar_state='expanded')
@@ -10,8 +10,11 @@ st.set_page_config(layout='wide', initial_sidebar_state='expanded')
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
+# AUTOREFRESH CADA CIERTO TIEMPO
+st_autorefresh(interval=50000, limit=None, key="refresh_counter")
+
 # ------------------- CARGAR INFO -------------------
-df = pd.read_csv("Data/uplinks_2025-08-31.csv") # <-- cámbiale el nombre al CSV real
+df = pd.read_csv("Data/uplinks_2025-08-31.csv") # <-- NOMBRE DEL CSV REAL
 df['time'] = pd.to_datetime(df['time'], errors='coerce')
 
 # ------------------- BARRA DE SELECCIÓN -------------------
@@ -87,4 +90,3 @@ with col2:
 # ------------------- GRAFICO TEMP HUMEDAD -------------------
 st.markdown('### Line chart')
 st.line_chart(df, x='time', y=plot_data, height=400)
-
